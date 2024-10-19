@@ -4,6 +4,7 @@ import MenuPage from './pages/MenuPage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 import CheckUserPage from './pages/CheckUserPage.jsx';
 import TestUIPage from './pages/TestUIPage.jsx';
+import RegisterPage from './pages/RegisterPage.jsx';
 
 const App = () => {
   return (
@@ -12,6 +13,7 @@ const App = () => {
         <Route path="/" element={<MenuPage />} />
         <Route path="/checkuser" element={<CheckUserPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
         <Route path="/test" element={<TestUIPage />} />
       </Routes>
     </BrowserRouter>

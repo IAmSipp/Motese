@@ -8,7 +8,9 @@ export const CheckUserPage = () => {
         <Link to="/login">
           <Button width="2/3" text="เคยเล่นเกมนี้มาก่อน ใช้บัญชีผู้เล่นเดิมได้เลย!" />
         </Link>
-        <Button width="2/3" text="ไม่เคยเล่นเกมนี้มาก่อน สมัครที่นี้เลย!" />
+        <Link to="/register">
+          <Button width="2/3" text="ไม่เคยเล่นเกมนี้มาก่อน สมัครที่นี้เลย!" />
+        </Link>
         <Link to="/">
             <Button width="2/3" text="กลับหน้าแรก" />    
         </Link>
