@@ -8,9 +8,9 @@ export const MenuPage = () => {
     <div className='w-screen flex flex-col items-center justify-center min-h-screen space-y-4'>
       <Logo size="96" />
       <Link to="/checkuser">
-        <Button size="96" text="เริ่มเกม" />
+        <Button width="96" text="เริ่มเกม" />
       </Link>
-      <Button size="96" text="ออกเกม" />
+      <Button width="96" text="ออกเกม" />
     </div>
   );
 };

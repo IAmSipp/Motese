@@ -1,5 +1,4 @@
 import React from 'react'
-import { sizeClasses } from './size';
 
 export const Logo = ({ size }) => {
   return (
