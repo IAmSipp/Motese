@@ -2,29 +2,22 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '../components/button.jsx';
 import { Form } from '../components/form.jsx';
+import { useUser } from '../UserContext';
 
 export const RegisterPage = () => {
-  const [formData, setFormData] = useState({
-    username: '',
-    password1: '',
-    password2: '',
-  });
+  const [formData, setFormData] = useState({ username: '', password1: '', password2: '' });
   const [errorMessage, setErrorMessage] = useState('');
   const [submitMessage, setSubmitMessage] = useState('');
-
   const navigate = useNavigate();
+  const { storeUserInfo } = useUser();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+    setFormData((prevState) => ({ ...prevState, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const { username, password1, password2 } = formData;
     const passwordPattern = /^\d{4}$/;
 
@@ -40,19 +33,14 @@ export const RegisterPage = () => {
       return;
     }
 
-    const data = {
-      username,
-      password: password1,
-    };
+    const data = { username, password: password1 };
 
     try {
       const response = await fetch(
         'https://ap-southeast-1.aws.data.mongodb-api.com/app/motese-aqvfblf/endpoint/PostUser',
         {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data),
         }
       );
@@ -61,8 +49,7 @@ export const RegisterPage = () => {
       if (response.ok) {
         setErrorMessage('');
         setSubmitMessage(result.message);
-        sessionStorage.setItem('username', result.user.username);
-        sessionStorage.setItem('password', result.user.password);
+        storeUserInfo(result.user); // Store user info in context
 
         setTimeout(() => {
           navigate('/checkuser');

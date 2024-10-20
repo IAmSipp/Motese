@@ -1,55 +1,38 @@
 import React, { useState } from 'react';
-import { Link, useNavigate  } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '../components/button.jsx';
 import { Form } from '../components/form.jsx';
+import { useUser } from '../UserContext';
 
 export const LoginPage = () => {
   const [formData, setFormData] = useState({ username: '', password: '' });
   const [errorMessage, setErrorMessage] = useState('');
   const [submitMessage, setSubmitMessage] = useState('');
-
   const navigate = useNavigate();
+  const { storeUserInfo } = useUser();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+    setFormData((prevState) => ({ ...prevState, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const { username, password } = formData;
-    const passwordPattern = /^\d{4}$/;
-
-    // Validate password
-    if (!passwordPattern.test(password)) {
-      setErrorMessage('รหัสผ่านต้องเป็นตัวเลข 4 หลัก');
-      setSubmitMessage('');
-      return;
-    }
 
     try {
       const response = await fetch(
         `https://ap-southeast-1.aws.data.mongodb-api.com/app/motese-aqvfblf/endpoint/GetUser?username=${username}&password=${password}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+        { headers: { "Content-Type": "application/json" } }
       );
-
       const result = await response.json();
       if (response.ok) {
         setErrorMessage('');
         setSubmitMessage('เข้าสู่ระบบแล้ว...');
-        sessionStorage.setItem("username", result.username);
-        sessionStorage.setItem("password", result.password);
+        storeUserInfo(result); // Store user info in context
 
         setTimeout(() => {
-          navigate("/checkuser");
+          navigate("/profile");
         }, 2000);
       } else {
         setErrorMessage(result.error);
