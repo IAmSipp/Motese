@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '../components/button.jsx';
 import { Form } from '../components/form.jsx';
-import { useUser } from '../UserContext';
+import { useUser } from '../contexts/UserContext.jsx';
 
 export const LoginPage = () => {
   const [formData, setFormData] = useState({ username: '', password: '' });

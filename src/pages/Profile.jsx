@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useUser } from '../UserContext';
+import { useUser } from '../contexts/UserContext.jsx';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '../components/button.jsx';
 
@@ -123,7 +123,10 @@ const ProfilePage = () => {
             <Link to="/checkuser">
                 <Button text="กลับไปหน้าหลัก" text_size="text-2xl" bg_color="bg-orange-400" />
             </Link> 
-            <Button text="เล่นเกม" text_size="text-2xl" bg_color="bg-orange-400"  onClick={() => {/* Start game */}} />
+
+            <Link to="/stage">
+              <Button text="เล่นเกม" text_size="text-2xl" bg_color="bg-orange-400"/>
+            </Link>
           </div>
         </div>
       ) : (
