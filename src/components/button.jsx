@@ -10,6 +10,7 @@ export const Button = ({
   py='py-4', 
   rounded='rounded-xl',
   hover = 'hover:bg-yellow-500 hover:border-2 hover:border-pink-950',
+  z_index='z-20',
   onClick 
 }) => {
   return (

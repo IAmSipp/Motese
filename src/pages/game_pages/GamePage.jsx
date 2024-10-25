@@ -1,14 +1,31 @@
 import React, { useEffect, useRef, useState } from 'react';
 import SettingNavbar from '../../components/navbar.jsx';
 import { Button } from '../../components/button.jsx';
-import { FilesetResolver, HandLandmarker, PoseLandmarker } from '@mediapipe/tasks-vision';
-import { drawConnectors, drawLandmarks } from '@mediapipe/drawing_utils';
+import { FilesetResolver, HandLandmarker, PoseLandmarker, DrawingUtils } from '../../../public/models/tasks_vision';
 
 const GamePage = () => {
   return (
-    <>
-      <Setting />
-    </>
+    <div className='flex flex-col h-screen w-screen'>
+      <div className='h-12 z-50 bg-gray-800'>
+          <Setting />
+      </div>
+
+      <div className='flex flex-row w-full h-full'>
+        <div className='flex flex-col items-center space-y-2 h-full w-[30%] bg-yellow-100 p-2'>
+          <div className=' bg-red-500 w-full h-[40%]'>
+            <p className='text-white text-center w-full'>User Stats Section</p>
+          </div>
+          <div className='flex flex-col w-full h-[50%]'>
+            <WebcamView selectedWebcam={'Test'} />
+          </div>
+        </div>
+        
+
+        <div className='flex-grow h-full bg-yellow-500'>
+          <p className='text-white text-center'>Game Scene Section</p>
+        </div>
+      </div>
+    </div>
   );
 };
 
@@ -25,32 +42,27 @@ const Setting = () => {
   };
 
   return (
-    <div className='flex flex-col items-start justify-start'>
+    <div className='flex flex-col h-full'>
       {/* Setting button */}
-      <div className={`transition-all duration-500 ease-in-out overflow-hidden ${isNavbarVisible ? 'absolute top-1 ml-2 mt-20' : 'absolute top-0 m-2'}`}>
+      <div className={`transition-all duration-500 ease-in-out ${isNavbarVisible ? 'absolute top-1 ml-2 mt-20' : 'absolute top-0 m-2'}`}>
         <Button
           text={isNavbarVisible ? "ปิดตั้งค่า" : "เปิดตั้งค่า"}
-          text_size="text-2xl"
+          text_size="text-lg"
           text_color="text-white"
           bg_color="bg-blue-500"
           width='w-36'
-          py="py-2"
+          py="p-0"
           onClick={toggleNavbar}
         />
       </div>
 
-      {/* Setting bar */}
-      <div className={`transition-all duration-500 ease-in-out overflow-hidden ${isNavbarVisible ? 'max-h-screen opacity-100 pointer-events-auto' : 'max-h-0 opacity-0 pointer-events-none'}`}>
+      {/* Navbar Section - Blue */}
+      <div className={`transition-all duration-500 ease-in-out ${isNavbarVisible ? 'h-20 bg-blue-500 opacity-100 pointer-events-auto' : 'h-0 opacity-0 pointer-events-none'}`}>
         <SettingNavbar
           onSelectWebcam={setSelectedWebcam}
           onVolumeChange={handleVolumeChange}
           selectedWebcam={selectedWebcam}
         />
-      </div>
-      
-      {/* Webcam canvas */}
-      <div>
-        <WebcamView selectedWebcam={selectedWebcam} />
       </div>
     </div>
   );
@@ -60,48 +72,41 @@ const WebcamView = ({ selectedWebcam }) => {
   const [handLandmarker, setHandLandmarker] = useState(undefined);
   const [poseLandmarker, setPoseLandmarker] = useState(undefined);
   const [webcamRunning, setWebcamRunning] = useState(false);
+  const isWebcamRunningRef = useRef(false);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
-  
-  const [handResults, setHandResults] = useState(undefined);
-  const [poseResults, setPoseResults] = useState(undefined);
 
+  let handResults, poseResults;
   let lastVideoTime = -1;
 
   useEffect(() => {
     const createLandmarkers = async () => {
       try {
-        console.log("Attempting to load FilesetResolver...");
-        
-        // Resolve FilesetResolver for Vision Tasks
         const vision = await FilesetResolver.forVisionTasks("models/wasm");
-        console.log("FilesetResolver loaded successfully:", vision);
         
         const hand_landmarks = await HandLandmarker.createFromOptions(vision, {
           baseOptions: {
             modelAssetPath: "models/hand_model/hand_landmarker.task",
             delegate: "GPU"
           },
+          runningMode: 'VIDEO',
           minHandDetectionConfidence: 0.4,
           minHandPresenceConfidence: 0.4,
           minTrackingConfidence: 0.4,
           numHands: 2
         });
 
-        console.log("Hand Landmarker initialized:", hand_landmarks);
-
         const pose_landmarks = await PoseLandmarker.createFromOptions(vision, {
           baseOptions: {
             modelAssetPath: "models/pose_model/pose_landmarker_lite.task",
             delegate: "GPU"
           },
+          runningMode: 'VIDEO',
           minPoseDetectionConfidence: 0.9,
           minPosePresenceConfidence: 0.9,
           minTrackingConfidence: 0.1,
           numPose: 1
         });
-
-        console.log("Pose Landmarker initialized:", pose_landmarks);
 
         setHandLandmarker(hand_landmarks);
         setPoseLandmarker(pose_landmarks);
@@ -114,44 +119,44 @@ const WebcamView = ({ selectedWebcam }) => {
     createLandmarkers();
   }, []);
 
-  const enableCam = async () => {
+  const EnableWebcam = async () => {
     if (!handLandmarker || !poseLandmarker) {
       console.log("Wait! Landmarkers not loaded yet.");
       return;
     }
-  
-    setWebcamRunning(!webcamRunning);
-    if (webcamRunning) {
-      console.log("Stopping webcam...");
+
+    isWebcamRunningRef.current = !isWebcamRunningRef.current;
+    setWebcamRunning(isWebcamRunningRef.current);
+
+    if (!isWebcamRunningRef.current) {
       let tracks = videoRef.current.srcObject?.getTracks();
       tracks?.forEach(track => track.stop());
-      videoRef.current.style.display = "none";
     } else {
-      videoRef.current.style.display = "inline-block";
       try {
-        console.log("Starting webcam...");
         let stream = await navigator.mediaDevices.getUserMedia({ video: true });
         videoRef.current.srcObject = stream;
-        videoRef.current.play(); // Ensure video is playing
-        videoRef.current.addEventListener("loadeddata", predictWebcam);
+        videoRef.current.play();
+        videoRef.current.addEventListener("loadeddata", () => PredictWebcam());
       } catch (error) {
         console.error("Error accessing webcam:", error);
       }
     }
   };
 
-  const predictWebcam = async () => {
-    if (!webcamRunning) return;
-
-    await DetectingVideo();
-
+  const PredictWebcam = async () => {
     const canvasCtx = canvasRef.current.getContext("2d");
-    canvasCtx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-    
-    DrawHandDetection(canvasCtx);
-    DrawPoseDetection(canvasCtx);
 
-    window.requestAnimationFrame(predictWebcam);
+    while (isWebcamRunningRef.current) {
+      await DetectingVideo();
+
+      canvasCtx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+      DrawHandDetection(canvasCtx);
+      DrawPoseDetection(canvasCtx);
+
+      await new Promise(resolve => setTimeout(resolve, 16));
+    }
+
+    canvasCtx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
   };
 
   const DetectingVideo = async () => {
@@ -170,57 +175,54 @@ const WebcamView = ({ selectedWebcam }) => {
           const handDetection = handLandmarker.detectForVideo(video, startTimeMs);
           const poseDetection = poseLandmarker.detectForVideo(video, startTimeMs);
           
-          setHandResults(handDetection);
-          setPoseResults(poseDetection);
-          
-          console.log("Hand Detection Results:", handDetection);
-          console.log("Pose Detection Results:", poseDetection);
+          handResults = handDetection;
+          poseResults = poseDetection;
         } catch (error) {
           console.error("Error detecting landmarks:", error);
         } 
       }
-      else{
-        console.log("Nothing");
-      }
+    } else {
+      console.log("Video not playing or dimensions not available.");
     }
   };
 
   const DrawPoseDetection = (ctx) => {
+    const draw = new DrawingUtils(ctx);
     if (poseResults && poseResults.landmarks.length > 0) {
       for (const landmark of poseResults.landmarks) {
-        drawConnectors(ctx, landmark, PoseLandmarker.POSE_CONNECTIONS);
-        drawLandmarks(ctx, landmark);
+        draw.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
+        draw.drawLandmarks(landmark);
       }
     }
   };
 
   const DrawHandDetection = (ctx) => {
+    const draw = new DrawingUtils(ctx);
     if (handResults && handResults.handednesses.length > 0) {
       for (const landmark of handResults.landmarks) {
-        drawConnectors(ctx, landmark, HandLandmarker.HAND_CONNECTIONS, {
-          color: "#00FF00",
-          lineWidth: 2
-        });
-        drawLandmarks(ctx, landmark, {
-          color: "#FF0000",
-          lineWidth: 1
-        });
+        draw.drawConnectors(landmark, HandLandmarker.HAND_CONNECTIONS);
+        draw.drawLandmarks(landmark);
       }
     }
   };
 
   return (
-    <div className="webcam-container">
-      <Button
-        text={webcamRunning ? "ปิดกล้อง" : "เปิดกล้อง"}
-        text_size="text-2xl"
-        text_color="text-white"
-        bg_color="bg-blue-500"
-        py="py-2"
-        onClick={enableCam}
-      />
-      <video ref={videoRef} style={{ display: 'none' }} playsInline autoPlay />
-      <canvas ref={canvasRef} />
+    <div className="flex flex-col w-full h-full">
+      <div className="relative w-full h-full bg-pink-400">
+        <video ref={videoRef} className="w-full h-full bg-black" />
+        <canvas ref={canvasRef} className="absolute top-0 left-0 w-full h-full z-40" />
+      </div>
+      <div className='mt-2'>
+        <Button
+          text={webcamRunning ? "ปิดกล้อง" : "เปิดกล้อง"}
+          text_size="text-2xl"
+          text_color="text-white"
+          width="w-[100%]"
+          bg_color="bg-blue-500"
+          py="py-2"
+          onClick={EnableWebcam}
+        />
+      </div>
     </div>
   );
 };
