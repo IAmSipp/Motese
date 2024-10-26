@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import SettingNavbar from '../../components/navbar.jsx';
-import { useGame } from '../../contexts/GameContext.jsx';
+import { useGameContext } from '../../contexts/GameContext.jsx';
+import { useCameraContext } from '../../contexts/CameraContext.jsx';
+import { useUser } from '../../contexts/UserContext.jsx';
+
 import { Button } from '../../components/button.jsx';
 import { FilesetResolver, HandLandmarker, PoseLandmarker, DrawingUtils } from '../../../public/Models/tasks_vision';
 import useUnityInstance from '../../contexts/UnityContext.jsx';
@@ -14,8 +16,8 @@ const GamePage = () => {
 
       <div className='flex flex-row w-full h-full'>
         <div className='flex flex-col items-center space-y-2 h-full w-[20%] bg-yellow-100 p-2'>
-          <div className=' bg-red-500 w-full h-[40%]'>
-            <p className='text-white text-center w-full'>User Stats Section</p>
+          <div className=' bg-blue-950 w-full h-[40%] rounded-2xl'>
+            <UserStatView />
           </div>
           <div className='flex flex-col w-full h-[50%]'>
             <WebcamView />
@@ -31,17 +33,46 @@ const GamePage = () => {
   );
 };
 
+const UserStatView = () => {
+  const { userInformation } = useUser();
+  const { selectedStage, selectedLevel } = useGameContext();
+
+  const currentStages = userInformation.history.filter(data => 
+    data.stage === selectedStage+1 && data.level === selectedLevel+1
+  );
+  let highScore = 0;
+  currentStages.forEach(data => {
+  highScore = Math.max(highScore, data.score);
+  });
+
+  return (
+    <div className='flex flex-col space-y-2 p-3'>
+      <h1 className='text-3xl text-center'>ข้อมูลผู้เล่น</h1>
+      <div className='flex flex-col space-y-2 text-3xl'>
+        <div className='flex flex-row items-center'>
+          <h2>คุณคือ: {userInformation.username}</h2>
+        </div>
+        <div className='flex flex-row items-center'>
+          <h2>ด่าน: {selectedStage+1}</h2>
+        </div>
+        <div className='flex flex-row items-center'>
+          <h2>ความยาก: {selectedLevel+1}</h2>
+        </div>
+        <div className='flex flex-row items-center'>
+          <h2>คะแนนสูงสุด: {highScore ? highScore : 0}</h2>
+        </div>
+      </div>
+    </div>
+  )
+};
+
 const Setting = () => {
-  const { selectedWebcam, setSelectedWebcam, isFlip, setIsFlip } = useGame();
+  const { selectedWebcam, setSelectedWebcam, setIsFlip } = useCameraContext();
   const [isNavbarVisible, setIsNavbarVisible] = useState(false);
 
   const toggleNavbar = () => {
     setIsNavbarVisible(!isNavbarVisible);
   };
-
-  const toggleFlipCamera = () => {
-    setIsFlip(prev => !prev);
-  }
 
   return (
     <div className='flex flex-col h-full'>
@@ -56,33 +87,180 @@ const Setting = () => {
           onClick={toggleNavbar}
         />
       </div>
-
+      
       <div className={`transition-all duration-500 ease-in-out ${isNavbarVisible ? 'h-20 bg-blue-500 opacity-100 pointer-events-auto' : 'h-0 opacity-0 pointer-events-none'}`}>
-        <SettingNavbar
-          onSelectWebcam={setSelectedWebcam}
-          // onVolumeChange={}
-          onFlipCamera={toggleFlipCamera}
-          selectedWebcam={selectedWebcam}
-        />
+        <SettingNavbar/>
+      </div>
+    </div>
+  );
+};
+
+const SettingNavbar = () => {
+  const { setMasterVolume, setMusicVolume, setEffectVolume } = useGameContext();
+  const { webcamList, selectedWebcam, setSelectedWebcam, setIsFlip } = useCameraContext([]);
+  
+  const ToggleFlipCamera = () => {
+    setIsFlip(prev => !prev);
+  }
+
+  const SelectWebcam = (webcam) => {
+    setSelectedWebcam(webcam);
+  }
+
+
+  return (
+    <div className="fixed top-0 left-0 w-full h-20 bg-gray-800 text-white text-2xl flex justify-between items-center px-4 z-50">
+      <div className="flex space-x-4 items-center">
+        <div className="flex flex-col items-center">
+          <label className="font-bold">เสียงหลัก</label>
+          <input
+            type="range"
+            min="0"
+            max="100"
+            defaultValue="50"
+            className="w-24 appearance-none h-2 bg-gray-300 rounded-lg"
+            onChange={(e) => setMasterVolume(e.target.value)}
+          />
+          <style jsx>{`
+            input[type='range']::-webkit-slider-thumb {
+              appearance: none;
+              height: 16px;
+              width: 16px;
+              border-radius: 9999px; /* Full rounding */
+              background-color: #4caf50; /* Green thumb */
+              cursor: pointer;
+            }
+            
+            input[type='range']::-moz-range-thumb {
+              height: 16px;
+              width: 16px;
+              border-radius: 9999px;
+              background-color: #4caf50;
+              cursor: pointer;
+            }
+          `}</style>
+        </div>
+
+        <div className="flex flex-col items-center">
+          <label className="font-bold">เสียงเพลง</label>
+            <input
+              type="range"
+              min="0"
+              max="100"
+              defaultValue="50"
+              className="w-24 appearance-none h-2 bg-gray-300 rounded-lg"
+              onChange={(e) => setMusicVolume(e.target.value)}
+            />
+            <style jsx>{`
+              input[type='range']::-webkit-slider-thumb {
+                appearance: none;
+                height: 16px;
+                width: 16px;
+                border-radius: 9999px; /* Full rounding */
+                background-color: #4caf50; /* Green thumb */
+                cursor: pointer;
+              }
+              
+              input[type='range']::-moz-range-thumb {
+                height: 16px;
+                width: 16px;
+                border-radius: 9999px;
+                background-color: #4caf50;
+                cursor: pointer;
+              }
+            `}</style>
+        </div>
+
+        <div className="flex flex-col items-center">
+          <label className="font-bold">เสียงเอฟเฟค</label>
+            <input
+              type="range"
+              min="0"
+              max="100"
+              defaultValue="50"
+              className="w-24 appearance-none h-2 bg-gray-300 rounded-lg"
+              onChange={(e) => setEffectVolume(e.target.value)}
+            />
+            <style jsx>{`
+              input[type='range']::-webkit-slider-thumb {
+                appearance: none;
+                height: 16px;
+                width: 16px;
+                border-radius: 9999px; /* Full rounding */
+                background-color: #4caf50; /* Green thumb */
+                cursor: pointer;
+              }
+              
+              input[type='range']::-moz-range-thumb {
+                height: 16px;
+                width: 16px;
+                border-radius: 9999px;
+                background-color: #4caf50;
+                cursor: pointer;
+              }
+            `}</style>
+        </div>
+      </div>
+
+      <div className="flex flex-row space-x-2 items-center">
+        <div>
+          <b>กล้อง: </b>
+          <span className="ml-2">{selectedWebcam ? selectedWebcam.label : 'ไม่เลือกกล้อง'}</span>
+        </div>
+        <div className="flex space-x-2 group">
+          <Button 
+            text="เลือกกล้อง" 
+            text_size="text-2xl" 
+            text_color="text-white" 
+            bg_color="bg-gray-700" 
+            width="w-44" 
+            height="h-auto" 
+            py="py-2"
+            onClick={() => {}}
+          />
+          <ul className="absolute hidden group-hover:block bg-white text-black rounded mt-10 w-40 shadow-lg">
+              {webcamList.map((webcam, index) => (
+                <li
+                  key={webcam.deviceId}
+                  className="cursor-pointer px-4 py-2 hover:bg-gray-200"
+                  onClick={() => SelectWebcam(webcam)}
+                >
+                  {webcam.label || `Webcam ${index + 1}`}
+                </li>
+              ))}
+            </ul>
+          <Button 
+            text="กลับด้านกล้อง" 
+            text_size="text-2xl" 
+            text_color="text-white" 
+            bg_color="bg-gray-700" 
+            width="w-44" 
+            height="h-auto" 
+            py="py-2"
+            onClick={ToggleFlipCamera}
+            className="mt-2"
+          />
+        </div>
       </div>
     </div>
   );
 };
 
 const WebcamView = () => {
-  const { selectedWebcam, setSelectedWebcam, isFlip, setIsFlip } = useGame();
+  const { selectedWebcam, setSelectedWebcam, isFlip } = useCameraContext();
+
   const [handLandmarker, setHandLandmarker] = useState(undefined);
   const [poseLandmarker, setPoseLandmarker] = useState(undefined);
 
   const [webcamRunning, setWebcamRunning] = useState(false);
   const isWebcamRunningRef = useRef(false);
-
+  
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
-
+  
   let handResults, poseResults;
   let lastVideoTime = -1;
-
+  
   useEffect(() => {
     const createLandmarkers = async () => {
       try {
@@ -136,23 +314,47 @@ const WebcamView = () => {
       return;
     }
 
-    isWebcamRunningRef.current = !isWebcamRunningRef.current;
-    setWebcamRunning(isWebcamRunningRef.current);
-
-    if (!isWebcamRunningRef.current) {
-      let tracks = videoRef.current.srcObject?.getTracks();
-      tracks?.forEach(track => track.stop());
+    
+    if (isWebcamRunningRef.current) {
+      DeactivateCam();
     } else {
       try {
-        let stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        videoRef.current.srcObject = stream;
-        videoRef.current.play();
-        videoRef.current.addEventListener("loadeddata", () => PredictWebcam());
+        ActivateCam();
       } catch (error) {
         console.error("Error accessing webcam:", error);
       }
     }
   };
+
+  const DeactivateCam = async () => {
+    isWebcamRunningRef.current = false;
+    setWebcamRunning(isWebcamRunningRef.current);
+
+    let tracks = videoRef.current.srcObject?.getTracks();
+      tracks?.forEach(track => track.stop());
+  }
+
+  const ActivateCam = async () => {
+    isWebcamRunningRef.current = true;
+    setWebcamRunning(isWebcamRunningRef.current);
+
+    const constraints = {
+      video: {
+        deviceId: selectedWebcam ? {exact: selectedWebcam.deviceId} : undefined
+      }
+    };
+
+    let stream = await navigator.mediaDevices.getUserMedia(constraints);
+    videoRef.current.srcObject = stream;
+    videoRef.current.play();
+    videoRef.current.addEventListener("loadeddata", () => PredictWebcam());
+  }
+
+  useEffect(() => {
+    if (selectedWebcam && selectedWebcam.deviceId) {
+      DeactivateCam();
+    }
+  }, [selectedWebcam]);
 
   const PredictWebcam = async () => {
     const canvasCtx = canvasRef.current.getContext("2d");
@@ -313,11 +515,44 @@ const WebcamView = () => {
 };
 
 const GameView = () => {
-  const { Unity, unityProvider, sendMessage } = useUnityInstance();
+  const { selectedStage, selectedLevel, masterVolume, musicVolume, effectVolume } = useGameContext();
+  const { Unity, unityProvider, isLoaded, sendMessage } = useUnityInstance(selectedStage, selectedLevel);
 
-  const sendDataToUnity = () => {
-    sendMessage('AudioManager', 'ChangeMasterVolume', 0);
+  const ChangeStage = (stage_index) =>{
+    sendMessage("StageManager", "ChangeScene", stage_index);
+  }
+
+  const ChangeLevel = (level_index) =>{
+    sendMessage("StageManager", "SelectDifficulty", level_index);
+  }
+
+  const SetMasterVolume = (volume) => {
+    sendMessage("AudioManager", "ChangeMasterVolume", volume);
   };
+
+  const SetMusicVolume = (volume) => {
+    sendMessage("AudioManager", "ChangeMusicVolume", volume);
+  };
+
+  const SetEffectVolume = (volume) => {
+    sendMessage("AudioManager", "ChangeEffectVolume", volume);
+  };
+
+  useEffect(() => {
+    SetMasterVolume(parseInt(masterVolume));
+  }, [masterVolume]);
+
+  useEffect(() => {
+    SetMusicVolume(parseInt(musicVolume));
+  }, [musicVolume]);
+
+  useEffect(() => {
+    SetEffectVolume(parseInt(effectVolume));
+  }, [effectVolume]);
+
+  useEffect(() => {
+    ChangeStage(selectedStage)
+  }, [selectedStage])
 
   return (
     <div className='flex items-center justify-center w-full h-full bg-black'>

@@ -1,11 +1,14 @@
 import React from 'react';
 import { Button } from './button.jsx';
+import useUnityInstance from '../contexts/UnityContext.jsx';
 
 const SettingNavbar = ({ onSelectWebcam, onVolumeChange, selectedWebcam, onFlipCamera }) => {
+  const { SetMasterVolume, SetMusicVolume, SetEffectVolume } = useUnityInstance();
+
   return (
     <div className="fixed top-0 left-0 w-full h-20 bg-gray-800 text-white text-2xl flex justify-between items-center px-4 z-50">
       <div className="flex space-x-4 items-center">
-      <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center">
           <label className="font-bold">เสียงหลัก</label>
           <input
             type="range"
@@ -13,37 +16,7 @@ const SettingNavbar = ({ onSelectWebcam, onVolumeChange, selectedWebcam, onFlipC
             max="100"
             defaultValue="50"
             className="w-24 appearance-none h-2 bg-gray-300 rounded-lg"
-            onChange={(e) => onVolumeChange('music', e.target.value)}
-          />
-          <style jsx>{`
-            input[type='range']::-webkit-slider-thumb {
-              appearance: none;
-              height: 16px;
-              width: 16px;
-              border-radius: 9999px; /* Full rounding */
-              background-color: #4caf50; /* Green thumb */
-              cursor: pointer;
-            }
-            
-            input[type='range']::-moz-range-thumb {
-              height: 16px;
-              width: 16px;
-              border-radius: 9999px;
-              background-color: #4caf50;
-              cursor: pointer;
-            }
-          `}</style>
-      </div>
-
-        <div className="flex flex-col items-center">
-        <label className="font-bold">เสียงเพลง</label>
-          <input
-            type="range"
-            min="0"
-            max="100"
-            defaultValue="50"
-            className="w-24 appearance-none h-2 bg-gray-300 rounded-lg"
-            onChange={(e) => onVolumeChange('music', e.target.value)}
+            onChange={(e) => SetMasterVolume(e.target.value)}
           />
           <style jsx>{`
             input[type='range']::-webkit-slider-thumb {
@@ -64,34 +37,65 @@ const SettingNavbar = ({ onSelectWebcam, onVolumeChange, selectedWebcam, onFlipC
             }
           `}</style>
         </div>
+
         <div className="flex flex-col items-center">
-        <label className="font-bold">เสียงเอฟเฟค</label>
-          <input
-            type="range"
-            min="0"
-            max="100"
-            defaultValue="50"
-            className="w-24 appearance-none h-2 bg-gray-300 rounded-lg"
-            onChange={(e) => onVolumeChange('music', e.target.value)}
-          />
-          <style jsx>{`
-            input[type='range']::-webkit-slider-thumb {
-              appearance: none;
-              height: 16px;
-              width: 16px;
-              border-radius: 9999px; /* Full rounding */
-              background-color: #4caf50; /* Green thumb */
-              cursor: pointer;
-            }
-            
-            input[type='range']::-moz-range-thumb {
-              height: 16px;
-              width: 16px;
-              border-radius: 9999px;
-              background-color: #4caf50;
-              cursor: pointer;
-            }
-          `}</style>
+          <label className="font-bold">เสียงเพลง</label>
+            <input
+              type="range"
+              min="0"
+              max="100"
+              defaultValue="50"
+              className="w-24 appearance-none h-2 bg-gray-300 rounded-lg"
+              onChange={(e) => SetMusicVolume(e.target.value)}
+            />
+            <style jsx>{`
+              input[type='range']::-webkit-slider-thumb {
+                appearance: none;
+                height: 16px;
+                width: 16px;
+                border-radius: 9999px; /* Full rounding */
+                background-color: #4caf50; /* Green thumb */
+                cursor: pointer;
+              }
+              
+              input[type='range']::-moz-range-thumb {
+                height: 16px;
+                width: 16px;
+                border-radius: 9999px;
+                background-color: #4caf50;
+                cursor: pointer;
+              }
+            `}</style>
+        </div>
+
+        <div className="flex flex-col items-center">
+          <label className="font-bold">เสียงเอฟเฟค</label>
+            <input
+              type="range"
+              min="0"
+              max="100"
+              defaultValue="50"
+              className="w-24 appearance-none h-2 bg-gray-300 rounded-lg"
+              onChange={(e) => SetEffectVolume(e.target.value)}
+            />
+            <style jsx>{`
+              input[type='range']::-webkit-slider-thumb {
+                appearance: none;
+                height: 16px;
+                width: 16px;
+                border-radius: 9999px; /* Full rounding */
+                background-color: #4caf50; /* Green thumb */
+                cursor: pointer;
+              }
+              
+              input[type='range']::-moz-range-thumb {
+                height: 16px;
+                width: 16px;
+                border-radius: 9999px;
+                background-color: #4caf50;
+                cursor: pointer;
+              }
+            `}</style>
         </div>
       </div>
 

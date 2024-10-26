@@ -29,7 +29,7 @@ export const LoginPage = () => {
       if (response.ok) {
         setErrorMessage('');
         setSubmitMessage('เข้าสู่ระบบแล้ว...');
-        storeUserInfo(result); // Store user info in context
+        storeUserInfo(result);
 
         setTimeout(() => {
           navigate("/profile");

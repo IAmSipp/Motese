@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../../components/button.jsx';
-import { useGame } from '../../contexts/GameContext.jsx';
+import { useGameContext } from '../../contexts/GameContext.jsx';
 
 const TutorialVideo = () => {
-  const { selectedStage } = useGame();
+  const { selectedStage } = useGameContext();
   const navigate = useNavigate();
 
   const playTutorialVideo = (videoNumber) => {

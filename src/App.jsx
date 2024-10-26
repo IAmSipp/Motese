@@ -1,7 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { UserProvider } from './contexts/UserContext.jsx';
+import { CameraProvider } from './contexts/CameraContext.jsx';
 import { GameProvider } from './contexts/GameContext.jsx';
+import { UserProvider } from './contexts/UserContext.jsx';
 
 // Pages
 import CheckUserPage from './pages/CheckUserPage.jsx';
@@ -21,23 +22,25 @@ const App = () => {
   return (
     <UserProvider>
       <GameProvider>
-        <Router>
-          <Routes>
-            {/* User-related routes */}
-            <Route path="/" element={<MenuPage />} />
-            <Route path="/checkuser" element={<CheckUserPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/test" element={<TestUIPage />} />
+        <CameraProvider>
+          <Router>
+            <Routes>
+              {/* User-related routes */}
+              <Route path="/" element={<MenuPage />} />
+              <Route path="/checkuser" element={<CheckUserPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/test" element={<TestUIPage />} />
 
-            {/* Game-related routes */}
-            <Route path="/game" element={<GamePage />} />
-            <Route path="/stage" element={<StageSelection />} />
-            <Route path="/level" element={<LevelSelection />} />
-            <Route path="/tutorial" element={<TutorialVideo />} />
-          </Routes>
-        </Router>
+              {/* Game-related routes */}
+              <Route path="/game" element={<GamePage />} />
+              <Route path="/stage" element={<StageSelection />} />
+              <Route path="/level" element={<LevelSelection />} />
+              <Route path="/tutorial" element={<TutorialVideo />} />
+            </Routes>
+          </Router>
+        </CameraProvider>
       </GameProvider>
     </UserProvider>
   );

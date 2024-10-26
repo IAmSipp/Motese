@@ -1,11 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useGame } from '../../contexts/GameContext.jsx';
+import { useGameContext } from '../../contexts/GameContext.jsx';
 import { Button } from '../../components/button.jsx'; // Importing the Button component
 
 const StageSelection = () => {
   const navigate = useNavigate();
-  const { setSelectedStage } = useGame();
+  const { setSelectedStage } = useGameContext();
 
   const handleStageSelect = (stage) => {
     setSelectedStage(stage);
@@ -25,7 +25,7 @@ const StageSelection = () => {
           height="h-20"
           py="py-6"
           rounded="rounded-lg"
-          onClick={() => handleStageSelect(1)} 
+          onClick={() => handleStageSelect(0)} 
         />
 
         <Button 
@@ -35,7 +35,7 @@ const StageSelection = () => {
           height="h-20"
           py="py-6"
           rounded="rounded-lg"
-          onClick={() => handleStageSelect(2)} 
+          onClick={() => handleStageSelect(1)} 
         />
       </div>
     </div>

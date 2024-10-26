@@ -1,11 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useGame } from '../../contexts/GameContext.jsx';
+import { useGameContext } from '../../contexts/GameContext.jsx';
 import { Button } from '../../components/button.jsx';
 
 const LevelSelection = () => {
   const navigate = useNavigate();
-  const { setSelectedLevel } = useGame();
+  const { setSelectedLevel } = useGameContext();
 
   const handleLevelSelect = (level) => {
     setSelectedLevel(level);
@@ -25,7 +25,7 @@ const LevelSelection = () => {
           height="h-20"
           py="py-6"
           rounded="rounded-lg"
-          onClick={() => handleLevelSelect('ง่าย')} 
+          onClick={() => handleLevelSelect(0)} 
         />
 
         <Button 
@@ -35,7 +35,7 @@ const LevelSelection = () => {
           height="h-20"
           py="py-6"
           rounded="rounded-lg"
-          onClick={() => handleLevelSelect('ปานกลาง')} 
+          onClick={() => handleLevelSelect(1)} 
         />
 
         <Button 
@@ -45,7 +45,7 @@ const LevelSelection = () => {
           height="h-20"
           py="py-6"
           rounded="rounded-lg"
-          onClick={() => handleLevelSelect('ยาก')} 
+          onClick={() => handleLevelSelect(2)} 
         />
       </div>
     </div>

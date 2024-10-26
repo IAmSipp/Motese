@@ -1,26 +1,29 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useEffect } from 'react';
 
 const GameContext = createContext();
 
-export const useGame = () => {
+export const useGameContext = () => {
   return useContext(GameContext);
 };
 
 export const GameProvider = ({ children }) => {
-  const [selectedStage, setSelectedStage] = useState(null);
-  const [selectedLevel, setSelectedLevel] = useState(null);
-  const [selectedWebcam, setSelectedWebcam] = useState(null);
-  const [isFlip, setIsFlip] = useState(false);
+  const [selectedStage, setSelectedStage] = useState(1);
+  const [selectedLevel, setSelectedLevel] = useState(1);
+  const [masterVolume, setMasterVolume] = useState(50);
+  const [musicVolume, setMusicVolume] = useState(50);
+  const [effectVolume, setEffectVolume] = useState(50);
 
   const value = {
     selectedStage,
     setSelectedStage,
     selectedLevel,
     setSelectedLevel,
-    selectedWebcam,
-    setSelectedWebcam,
-    isFlip,
-    setIsFlip,
+    masterVolume,
+    setMasterVolume,
+    musicVolume,
+    setMusicVolume,
+    effectVolume,
+    setEffectVolume,
   };
 
   return (
