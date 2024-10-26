@@ -9,12 +9,18 @@ export const useGame = () => {
 export const GameProvider = ({ children }) => {
   const [selectedStage, setSelectedStage] = useState(null);
   const [selectedLevel, setSelectedLevel] = useState(null);
+  const [selectedWebcam, setSelectedWebcam] = useState(null);
+  const [isFlip, setIsFlip] = useState(false);
 
   const value = {
     selectedStage,
     setSelectedStage,
     selectedLevel,
     setSelectedLevel,
+    selectedWebcam,
+    setSelectedWebcam,
+    isFlip,
+    setIsFlip,
   };
 
   return (

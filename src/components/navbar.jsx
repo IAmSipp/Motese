@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from './button.jsx';
 
-const SettingNavbar = ({ onSelectWebcam, onVolumeChange, selectedWebcam }) => {
+const SettingNavbar = ({ onSelectWebcam, onVolumeChange, selectedWebcam, onFlipCamera }) => {
   return (
     <div className="fixed top-0 left-0 w-full h-20 bg-gray-800 text-white text-2xl flex justify-between items-center px-4 z-50">
       <div className="flex space-x-4 items-center">
@@ -139,7 +139,7 @@ const SettingNavbar = ({ onSelectWebcam, onVolumeChange, selectedWebcam }) => {
             width="w-44" 
             height="h-auto" 
             py="py-2"
-            onClick={() => {}}
+            onClick={onFlipCamera}
             className="mt-2"
           />
         </div>
