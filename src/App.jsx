@@ -14,9 +14,6 @@ import TestUIPage from './pages/TestUIPage.jsx';
 
 // Game pages
 import GamePage from './pages/game_pages/GamePage.jsx';
-import StageSelection from './pages/game_pages/StageSelectionPage.jsx';
-import LevelSelection from './pages/game_pages/LevelSelectionPage.jsx';
-import TutorialVideo from './pages/game_pages/TutorialPage.jsx';
 
 const App = () => {
   return (
@@ -35,9 +32,6 @@ const App = () => {
 
               {/* Game-related routes */}
               <Route path="/game" element={<GamePage />} />
-              <Route path="/stage" element={<StageSelection />} />
-              <Route path="/level" element={<LevelSelection />} />
-              <Route path="/tutorial" element={<TutorialVideo />} />
             </Routes>
           </Router>
         </CameraProvider>

@@ -9,13 +9,6 @@ const useUnityInstance = (selectedStage, selectedLevel) => {
     codeUrl: "Build/GameBuild.wasm",
   });
 
-  useEffect(() => {
-    if (isLoaded) {
-      sendMessage("StageManager", "ChangeScene", selectedStage);
-      sendMessage("StageManager", "SelectDifficulty", selectedLevel);
-    }
-  }, []);
-
   return { Unity, unityProvider, isLoaded, sendMessage };
 };
 

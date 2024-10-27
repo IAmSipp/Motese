@@ -1,22 +1,72 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useGameContext } from '../../contexts/GameContext.jsx';
 import { useCameraContext } from '../../contexts/CameraContext.jsx';
 import { useUser } from '../../contexts/UserContext.jsx';
+import StageSelection from './StageSelectionPage.jsx';
+import LevelSelection from './LevelSelectionPage.jsx';
+import TutorialVideo from './TutorialPage.jsx';
+import LoadingScreen from './LoadingPage.jsx';
 
 import { Button } from '../../components/button.jsx';
 import { FilesetResolver, HandLandmarker, PoseLandmarker, DrawingUtils } from '../../../public/Models/tasks_vision';
 import useUnityInstance from '../../contexts/UnityContext.jsx';
+import { useUnityContext } from 'react-unity-webgl';
 
 const GamePage = () => {
+  const [showStageSelection, setShowStageSelection] = useState(true);
+  const [showLevelSelection, setShowLevelSelection] = useState(false);
+  const [showTutorial, setShowTutorial] = useState(false);
+  
+  const [gameSelecting, setGameSelecting] = useState(true);
+  const [loading, setLoading] = useState(true); 
+  const { isLoaded } = useUnityContext();
+
+  const handleStageSelect = () => {
+    setShowStageSelection(false);
+    setShowLevelSelection(true);
+  };
+
+  const handleLevelSelect = () => {
+    setShowLevelSelection(false);
+    setShowTutorial(true);
+  };
+
+  const handleTutorial = () => {
+    setShowTutorial(false);
+    setGameSelecting(false);
+  };
+
+  const loadUnity = async () => {
+    await new Promise(resolve => setTimeout(resolve, 5000));
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    loadUnity();
+  }, [isLoaded]);
+
   return (
     <div className='flex flex-col h-screen w-screen'>
+      {loading && <LoadingScreen />}
+
+      {gameSelecting && 
+        <div className={`absolute top-0 left-0 z-40 bg-gray-600`}>
+          <div className="flex flex-col justify-center items-center w-screen h-screen">
+            {showStageSelection && <StageSelection onSelect={handleStageSelect} />}
+            {showLevelSelection && <LevelSelection onSelect={handleLevelSelect} />}
+            {showTutorial && <TutorialVideo onSelect={handleTutorial} />}
+          </div>
+        </div>
+      }
+
       <div className='h-12 z-50 bg-gray-800'>
         <Setting />
       </div>
 
-      <div className='flex flex-row w-full h-full'>
+      <div className='flex flex-row w-full h-full z-20'>
         <div className='flex flex-col items-center space-y-2 h-full w-[20%] bg-yellow-100 p-2'>
-          <div className=' bg-blue-950 w-full h-[40%] rounded-2xl'>
+          <div className=' bg-blue-950 w-full h-[40%] rounded-lg'>
             <UserStatView />
           </div>
           <div className='flex flex-col w-full h-[50%]'>
@@ -96,8 +146,34 @@ const Setting = () => {
 };
 
 const SettingNavbar = () => {
-  const { setMasterVolume, setMusicVolume, setEffectVolume } = useGameContext();
+  const { selectedStage, selectedLevel, setSelectedStage, setSelectedLevel, setMasterVolume, setMusicVolume, setEffectVolume } = useGameContext();
   const { webcamList, selectedWebcam, setSelectedWebcam, setIsFlip } = useCameraContext([]);
+  const navigate = useNavigate();
+
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isStageOpen, setIsStageOpen] = useState(false);
+  const [isLevelOpen, setIsLevelOpen] = useState(false);
+
+  const stages = [
+    { id: 1, name: 'ด่านที่ 1 กำมือ' },
+    { id: 2, name: 'ด่านที่ 2 ยกมือ' },
+  ];
+
+  const levels = [
+    { id: 1, name: 'ง่าย' },
+    { id: 2, name: 'ปานกลาง' },
+    { id: 3, name: 'ยาก' },
+  ];
+
+  const handleStageSelect = (stage) => {
+    setSelectedStage(stage.id-1);
+    setIsStageOpen(false);
+  };
+
+  const handleLevelSelect = (level) => {
+    setSelectedLevel(level.id-1);
+    setIsLevelOpen(false);
+  };
   
   const ToggleFlipCamera = () => {
     setIsFlip(prev => !prev);
@@ -107,9 +183,76 @@ const SettingNavbar = () => {
     setSelectedWebcam(webcam);
   }
 
+  const Back = () => {
+    navigate("/profile");
+  }
 
   return (
     <div className="fixed top-0 left-0 w-full h-20 bg-gray-800 text-white text-2xl flex justify-between items-center px-4 z-50">
+      <div className="flex space-x-4 items-center">
+        <div className="relative">
+          <Button 
+            text='กลับหน้าแรก'
+            text_size='text-xl'
+            width='w-28'
+            py='p-1'
+            onClick={Back}
+          />
+        </div>
+
+        <div className="relative">
+          <Button
+            text='เลือกด่าน'
+            text_size="text-xl"
+            width="w-24"
+            py="p-1"
+            onClick={() => {
+              setIsStageOpen(!isStageOpen);
+              setIsLevelOpen(false);
+            }}
+          />
+          {isStageOpen && (
+            <ul className="absolute bg-white text-black rounded mt-2 w-48 shadow-lg">
+              {stages.map((stage) => (
+                <li
+                  key={stage.id}
+                  className="cursor-pointer px-4 py-2 hover:bg-gray-200"
+                  onClick={() => handleStageSelect(stage)}
+                >
+                  {stage.name}{" "}{stage.id-1 == selectedStage ? "✔": ''}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        <div className="relative">
+          <Button
+            text='เลือกความยาก'
+            text_size="text-xl"
+            width="w-28"
+            py="p-1"
+            onClick={() => {
+              setIsLevelOpen(!isLevelOpen);
+              setIsStageOpen(false);
+            }}
+          />
+          {isLevelOpen && (
+            <ul className="absolute bg-white text-black rounded mt-2 w-40 shadow-lg">
+              {levels.map((level) => (
+                <li
+                  key={level.id}
+                  className="cursor-pointer px-4 py-2 hover:bg-gray-200"
+                  onClick={() => handleLevelSelect(level)}
+                >
+                  {level.name}{" "}{level.id-1 == selectedLevel  ? "✔": ''}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
+      
       <div className="flex space-x-4 items-center">
         <div className="flex flex-col items-center">
           <label className="font-bold">เสียงหลัก</label>
@@ -207,36 +350,41 @@ const SettingNavbar = () => {
           <b>กล้อง: </b>
           <span className="ml-2">{selectedWebcam ? selectedWebcam.label : 'ไม่เลือกกล้อง'}</span>
         </div>
-        <div className="flex space-x-2 group">
+        <div className="relative space-x-2">
           <Button 
             text="เลือกกล้อง" 
-            text_size="text-2xl" 
+            text_size="text-xl" 
             text_color="text-white" 
             bg_color="bg-gray-700" 
-            width="w-44" 
+            width="w-28" 
             height="h-auto" 
-            py="py-2"
-            onClick={() => {}}
+            py="p-1"
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           />
-          <ul className="absolute hidden group-hover:block bg-white text-black rounded mt-10 w-40 shadow-lg">
+        
+          {isDropdownOpen && (
+            <ul className="absolute bg-white text-black rounded mt-2 w-48 shadow-lg">
               {webcamList.map((webcam, index) => (
                 <li
                   key={webcam.deviceId}
                   className="cursor-pointer px-4 py-2 hover:bg-gray-200"
-                  onClick={() => SelectWebcam(webcam)}
+                  onClick={() => {
+                    SelectWebcam(webcam);
+                    setIsDropdownOpen(false);
+                  }}
                 >
-                  {webcam.label || `Webcam ${index + 1}`}
+                  {webcam.label || `Webcam ${index + 1}`}{" "}{webcam.label == selectedWebcam.label ? "✔": ''}
                 </li>
               ))}
-            </ul>
+            </ul>)}
           <Button 
             text="กลับด้านกล้อง" 
-            text_size="text-2xl" 
+            text_size="text-xl" 
             text_color="text-white" 
             bg_color="bg-gray-700" 
-            width="w-44" 
+            width="w-28" 
             height="h-auto" 
-            py="py-2"
+            py="p-1"
             onClick={ToggleFlipCamera}
             className="mt-2"
           />
@@ -247,7 +395,8 @@ const SettingNavbar = () => {
 };
 
 const WebcamView = () => {
-  const { selectedWebcam, setSelectedWebcam, isFlip } = useCameraContext();
+  const { selectedWebcam, isFlip } = useCameraContext();
+  const { motionCapture, setMotionCapture, poseStatus, setPoseStatus, selectedStage, selectedLevel } = useGameContext();
 
   const [handLandmarker, setHandLandmarker] = useState(undefined);
   const [poseLandmarker, setPoseLandmarker] = useState(undefined);
@@ -366,6 +515,8 @@ const WebcamView = () => {
       DrawHandDetection(canvasCtx);
       DrawPoseDetection(canvasCtx);
 
+      HandlePoseAndInteract();
+
       await new Promise(resolve => setTimeout(resolve, 16));
     }
 
@@ -422,9 +573,7 @@ const WebcamView = () => {
 
       CheckCurrentHandPose();
     }
-
   };
-
 
   let LHandFisting, RHandFisting;
   function CheckCurrentHandPose() {
@@ -481,11 +630,30 @@ const WebcamView = () => {
     const pose = [LHandFisting, RHandFisting, LArmUp, RArmUp];
     const flipPose = [RHandFisting, LHandFisting, RArmUp, LArmUp];
 
-    GetPose(
-      (arg = () => {
-        return isFlip ? flipPose : pose;
-      })
-    );
+    GetPose(isFlip ? flipPose: pose);
+  }
+
+  const GetPose = (status) => {
+    let leftHand = status[0];
+    let rightHand = status[1];
+    let leftArm = status[2];
+    let rightArm = status[3];
+
+    setPoseStatus([leftHand, rightHand, leftArm, rightArm]);
+
+    if (selectedStage === 0) {
+      setMotionCapture([
+        leftHand && !rightHand,
+        leftHand && rightHand,
+        !leftHand && rightHand]
+      );
+    } else if (selectedStage === 1) {
+      setMotionCapture([
+        leftArm && !rightArm,
+        leftArm && rightArm,
+        !leftArm && rightArm]
+      );
+    }
   }
 
   function FindAngle(a, b, c) {
@@ -497,7 +665,7 @@ const WebcamView = () => {
     <div className="flex flex-col w-full h-full">
       <div className="relative w-full h-full bg-pink-400">
         <video ref={videoRef} className="w-full h-full bg-black" />
-        <canvas ref={canvasRef} className="absolute top-0 left-0 w-full h-full z-40" />
+        <canvas ref={canvasRef} className="absolute top-0 left-0 w-full h-full z-30" />
       </div>
       <div className='mt-2'>
         <Button
@@ -515,7 +683,7 @@ const WebcamView = () => {
 };
 
 const GameView = () => {
-  const { selectedStage, selectedLevel, masterVolume, musicVolume, effectVolume } = useGameContext();
+  const { motionCapture, poseStatus, selectedStage, selectedLevel, masterVolume, musicVolume, effectVolume } = useGameContext();
   const { Unity, unityProvider, isLoaded, sendMessage } = useUnityInstance(selectedStage, selectedLevel);
 
   const ChangeStage = (stage_index) =>{
@@ -538,6 +706,26 @@ const GameView = () => {
     sendMessage("AudioManager", "ChangeEffectVolume", volume);
   };
 
+  const MotionControl = () => {
+    for (let i = 0; i < motionCapture.length; i++) {
+      if (motionCapture[i] == true) {
+        sendMessage("MotionManager", "GetMotion", i + 1);
+      } else {
+        sendMessage("MotionManager", "GetMotion", -i - 1);
+      }
+    }
+  };
+
+  const PoseStatus = () => {
+    for (let i = 0; i < poseStatus.length; i++) {
+      if (poseStatus[i] == true) {
+        sendMessage("MotionManager", "GetPose", i + 1);
+      } else {
+        sendMessage("MotionManager", "GetPose", -i - 1);
+      }
+    }
+  }
+
   useEffect(() => {
     SetMasterVolume(parseInt(masterVolume));
   }, [masterVolume]);
@@ -553,6 +741,29 @@ const GameView = () => {
   useEffect(() => {
     ChangeStage(selectedStage)
   }, [selectedStage])
+  
+  useEffect(() => {
+    ChangeLevel(selectedLevel)
+  }, [selectedLevel])
+
+  useEffect(() => {
+    ChangeStage(selectedStage)
+    ChangeLevel(selectedLevel)
+  }, [isLoaded])
+
+  useEffect(() => {
+    MotionControl();
+  }, [motionCapture])
+  
+  useEffect(() => {
+    PoseStatus();
+  }, [poseStatus])
+
+  useEffect(() => {
+    ChangeStage(selectedStage)
+    ChangeLevel(selectedLevel)
+  }, [isLoaded])
+
 
   return (
     <div className='flex items-center justify-center w-full h-full bg-black'>

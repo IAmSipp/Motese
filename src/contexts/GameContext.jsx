@@ -7,11 +7,13 @@ export const useGameContext = () => {
 };
 
 export const GameProvider = ({ children }) => {
-  const [selectedStage, setSelectedStage] = useState(1);
-  const [selectedLevel, setSelectedLevel] = useState(1);
+  const [selectedStage, setSelectedStage] = useState(0);
+  const [selectedLevel, setSelectedLevel] = useState(0);
   const [masterVolume, setMasterVolume] = useState(50);
   const [musicVolume, setMusicVolume] = useState(50);
   const [effectVolume, setEffectVolume] = useState(50);
+  const [motionCapture, setMotionCapture] = useState([false, false, false])
+  const [poseStatus, setPoseStatus] = useState([false, false, false, false])
 
   const value = {
     selectedStage,
@@ -24,6 +26,10 @@ export const GameProvider = ({ children }) => {
     setMusicVolume,
     effectVolume,
     setEffectVolume,
+    motionCapture,
+    setMotionCapture,
+    poseStatus,
+    setPoseStatus,
   };
 
   return (

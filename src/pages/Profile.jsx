@@ -124,7 +124,7 @@ const ProfilePage = () => {
                 <Button text="กลับไปหน้าหลัก" text_size="text-2xl" bg_color="bg-orange-400" />
             </Link> 
 
-            <Link to="/stage">
+            <Link to="/game">
               <Button text="เล่นเกม" text_size="text-2xl" bg_color="bg-orange-400"/>
             </Link>
           </div>
