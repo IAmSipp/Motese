@@ -1,0 +1,45 @@
+{
+  "_id": {
+    "$oid": "666ef4f9beedc30f49d60083"
+  },
+  "username": "T1",
+  "password": "1234",
+  "history": [
+    {
+      "date": "17-6-2024",
+      "time": "21.6",
+      "stage": "0",
+      "level": "2",
+      "score": "0",
+      "accuracy": "0",
+      "rank": "F"
+    },
+    {
+      "date": "17-6-2024",
+      "time": "20.58",
+      "stage": "0",
+      "level": "2",
+      "score": "0",
+      "accuracy": "0",
+      "rank": "F"
+    },
+    {
+      "date": "17-6-2024",
+      "time": "20.54",
+      "stage": "0",
+      "level": "2",
+      "score": "0",
+      "accuracy": "0",
+      "rank": "F"
+    },
+    {
+      "date": "17-6-2024",
+      "time": "19.54",
+      "stage": "0",
+      "level": "2",
+      "score": "0",
+      "accuracy": "0",
+      "rank": "F"
+    }
+  ]
+}
