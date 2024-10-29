@@ -49,7 +49,7 @@ export const RegisterPage = () => {
       if (response.ok) {
         setErrorMessage('');
         setSubmitMessage(result.message);
-        storeUserInfo(result.user); // Store user info in context
+        storeUserInfo(result.user);
 
         setTimeout(() => {
           navigate('/checkuser');

@@ -51,7 +51,7 @@ const GamePage = () => {
       {loading && <LoadingScreen />}
 
       {gameSelecting && 
-        <div className={`absolute top-0 left-0 z-40 bg-gray-600`}>
+        <div className={`absolute top-0 left-0 z-40 bg-sky-500`}>
           <div className="flex flex-col justify-center items-center w-screen h-screen">
             {showStageSelection && <StageSelection onSelect={handleStageSelect} />}
             {showLevelSelection && <LevelSelection onSelect={handleLevelSelect} />}
@@ -60,13 +60,13 @@ const GamePage = () => {
         </div>
       }
 
-      <div className='h-12 z-50 bg-gray-800'>
+      <div className='h-12 z-50 bg-[#2d3250]'>
         <Setting />
       </div>
 
       <div className='flex flex-row w-full h-full z-20'>
-        <div className='flex flex-col items-center space-y-2 h-full w-[20%] bg-yellow-100 p-2'>
-          <div className=' bg-blue-950 w-full h-[40%] rounded-lg'>
+        <div className='flex flex-col items-center space-y-2 h-full w-[25%] bg-[#7077a1] p-2'>
+          <div className='bg-[#2d3250] w-full h-[40%] rounded-lg'>
             <UserStatView />
           </div>
           <div className='flex flex-col w-full h-[50%]'>
@@ -126,12 +126,10 @@ const Setting = () => {
 
   return (
     <div className='flex flex-col h-full'>
-      <div className={`transition-all duration-500 ease-in-out ${isNavbarVisible ? 'absolute top-1 ml-2 mt-20' : 'absolute top-0 m-2'}`}>
+      <div className={`transition-all duration-500 ease-in-out ${isNavbarVisible ? 'absolute top-1 ml-2 mt-[5.5rem]' : 'absolute top-0 m-2'}`}>
         <Button
           text={isNavbarVisible ? "ปิดตั้งค่า" : "เปิดตั้งค่า"}
           text_size="text-lg"
-          text_color="text-white"
-          bg_color="bg-blue-500"
           width='w-36'
           py="p-0"
           onClick={toggleNavbar}
@@ -188,18 +186,8 @@ const SettingNavbar = () => {
   }
 
   return (
-    <div className="fixed top-0 left-0 w-full h-20 bg-gray-800 text-white text-2xl flex justify-between items-center px-4 z-50">
+    <div className="fixed top-0 left-0 w-full h-20 bg-[#2c314e] shadow-md shadow-black text-white text-2xl flex justify-between items-center px-4 z-50">
       <div className="flex space-x-4 items-center">
-        <div className="relative">
-          <Button 
-            text='กลับหน้าแรก'
-            text_size='text-xl'
-            width='w-28'
-            py='p-1'
-            onClick={Back}
-          />
-        </div>
-
         <div className="relative">
           <Button
             text='เลือกด่าน'
@@ -250,6 +238,16 @@ const SettingNavbar = () => {
               ))}
             </ul>
           )}
+        </div>
+
+        <div className="relative">
+          <Button 
+            text='กลับหน้าแรก'
+            text_size='text-xl'
+            width='w-28'
+            py='p-1'
+            onClick={Back}
+          />
         </div>
       </div>
       
@@ -354,8 +352,6 @@ const SettingNavbar = () => {
           <Button 
             text="เลือกกล้อง" 
             text_size="text-xl" 
-            text_color="text-white" 
-            bg_color="bg-gray-700" 
             width="w-28" 
             height="h-auto" 
             py="p-1"
@@ -380,8 +376,6 @@ const SettingNavbar = () => {
           <Button 
             text="กลับด้านกล้อง" 
             text_size="text-xl" 
-            text_color="text-white" 
-            bg_color="bg-gray-700" 
             width="w-28" 
             height="h-auto" 
             py="p-1"
@@ -663,17 +657,16 @@ const WebcamView = () => {
 
   return (
     <div className="flex flex-col w-full h-full">
-      <div className="relative w-full h-full bg-pink-400">
-        <video ref={videoRef} className="w-full h-full bg-black" />
-        <canvas ref={canvasRef} className="absolute top-0 left-0 w-full h-full z-30" />
+      <div className="relative w-full h-full">
+        {!isWebcamRunningRef.current && <h1 className='absolute z-50 w-full h-[90%] flex items-center justify-center text-center'>Webcam</h1>}
+        <video ref={videoRef} className="w-full h-[95%] bg-black" />
+        <canvas ref={canvasRef} className="absolute top-0 left-0 w-full h-[95%] z-30" />
       </div>
-      <div className='mt-2'>
+      <div className='-mt-1'>
         <Button
           text={webcamRunning ? "ปิดกล้อง" : "เปิดกล้อง"}
           text_size="text-2xl"
-          text_color="text-white"
           width="w-[100%]"
-          bg_color="bg-blue-500"
           py="py-2"
           onClick={EnableWebcam}
         />
@@ -685,6 +678,7 @@ const WebcamView = () => {
 const GameView = () => {
   const { motionCapture, poseStatus, selectedStage, selectedLevel, masterVolume, musicVolume, effectVolume } = useGameContext();
   const { Unity, unityProvider, isLoaded, sendMessage } = useUnityInstance(selectedStage, selectedLevel);
+  const { userInformation } = useUser();
 
   const ChangeStage = (stage_index) =>{
     sendMessage("StageManager", "ChangeScene", stage_index);
@@ -714,6 +708,12 @@ const GameView = () => {
         sendMessage("MotionManager", "GetMotion", -i - 1);
       }
     }
+  };
+
+  const SendUserData = () => {
+    let username = userInformation['username'];
+    console.log("Username is: " + username);
+    sendMessage("UserParameters(Clone)", "GetData", username);
   };
 
   const PoseStatus = () => {
@@ -762,13 +762,14 @@ const GameView = () => {
   useEffect(() => {
     ChangeStage(selectedStage)
     ChangeLevel(selectedLevel)
+    // SendUserData()
   }, [isLoaded])
 
 
   return (
     <div className='flex items-center justify-center w-full h-full bg-black'>
       <Unity
-        className='w-[90%] h-auto'
+        className='w-[98%] h-auto'
         unityProvider={unityProvider}
       />
     </div>

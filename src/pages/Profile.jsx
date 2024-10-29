@@ -76,9 +76,9 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="bg-[#7077a1] text-black flex flex-col justify-center items-center w-screen">
+    <div className="bg-[#7077a1] text-black flex flex-col justify-center items-center w-screen mt-4">
       {userInformation ? (
-        <div className="flex flex-col items-center bg-[#e8e9a1] rounded-3xl p-4 w-11/12 max-w-screen max-h-screen">
+        <div className="flex flex-col items-center bg-[#e8e9a1] rounded-3xl p-6 w-10/12">
           <h1 className="text-5xl font-bold">ชื่อของคุณ:</h1>
           <h2 className="text-2xl">คะแนนสูงสุด</h2>
 
@@ -87,7 +87,7 @@ const ProfilePage = () => {
             <select
               value={selectedStage}
               onChange={handleStageChange}
-              className="bg-orange-400 border-2 text-xl border-black rounded-lg py-1 px-3 mb-4"
+              className="bg-orange-400 border-2 text-xl border-black rounded-lg py-1 px-3 mb-3"
             >
               <option value="all">ทั้งหมด</option>
               <option value="1">ด่านที่ 1</option>
@@ -107,10 +107,10 @@ const ProfilePage = () => {
             </select>
           </div>
 
-          <div className="user-history overflow-y-auto bg-hsl(0, 83%, 72%) border-4 border-black rounded-2xl p-4 w-full">
+          <div className="user-history overflow-y-auto border-4 border-black rounded-2xl p-2 w-full h-80">
             <ul className="list-none">
               {filteredHistory.map((element, index) => (
-                <li key={index} className="bg-white border border-black text-2xl rounded-lg p-4 my-2 font-bold">
+                <li key={index} className="bg-white border border-black text-2xl rounded-lg p-2 my-1 font-extrabold">
                   วันที่: {element.date}, เวลา: {element.time} <br />
                   ด่านที่: {element.stage} ({getLevelName(element.level)}) <br />
                   คะแนน: {element.score}, ความแม่นยำ: {element.accuracy}, เกรด: {element.rank}

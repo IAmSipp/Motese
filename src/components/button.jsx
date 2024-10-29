@@ -2,7 +2,7 @@ import React from 'react';
 
 export const Button = ({ 
   text="ข้อความ", 
-  text_size='text-6xl', 
+  text_size='text-7xl', 
   text_color='text-black', 
   bg_color='bg-yellow-100', 
   width='w-96', 
