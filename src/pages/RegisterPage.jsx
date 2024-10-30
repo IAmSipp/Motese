@@ -72,8 +72,8 @@ export const RegisterPage = () => {
         </Link>
       </div>
 
-      <div className='flex flex-col items-center justify-center w-full p-2 h-[80%]'>
-        <div className='flex flex-col space-y-3 items-center justify-center bg-purple-950 w-6/12 h-72 rounded-t-3xl'>
+      <div className='flex flex-col items-center justify-center w-full p-2 h-[80%] font-semibold'>
+        <div className='flex flex-col space-y-3 items-center justify-center bg-orange-500 w-6/12 h-72 rounded-t-3xl'>
           <h1 className='text-6xl text-center w-full px-5 text-white'>สมัครสมาชิก</h1>
           {errorMessage && <h1 className="text-red-500 text-2xl">{errorMessage}</h1>}
           {submitMessage && <h1 className="text-green-500 text-2xl">{submitMessage}</h1>}
@@ -116,12 +116,11 @@ export const RegisterPage = () => {
             text="สมัครสมาชิก"
             text_color='text-white'
             text_size='text-3xl'
-            bg_color='bg-purple-950'
+            bg_color='bg-orange-500'
             py='p-1'
             width='w-80'
             heigh='h-10'
             rounded='rounded-3xl'
-            hover='hover:bg-purple-600 hover:border-pink-950'
             onClick={handleSubmit}
           />
         </div>

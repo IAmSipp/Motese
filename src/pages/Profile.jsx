@@ -20,15 +20,14 @@ const ProfilePage = () => {
   }, [userInformation, selectedStage, selectedLevel]);
 
   const calculateHighScores = (historyData) => {
-    const stageCount = 2; // Adjust according to your game stages
-    const levelCount = 3; // Adjust according to your level count
+    const stageCount = 2;
+    const levelCount = 3;
     const highScoreData = Array.from({ length: stageCount }, () => Array(levelCount).fill(0));
 
     historyData.forEach((element) => {
       const stageIndex = element.stage - 1;
       const levelIndex = element.level - 1;
 
-      // Ensure indices are valid
       if (stageIndex >= 0 && stageIndex < stageCount && levelIndex >= 0 && levelIndex < levelCount) {
         if (element.score > highScoreData[stageIndex][levelIndex]) {
           highScoreData[stageIndex][levelIndex] = element.score;
@@ -48,7 +47,6 @@ const ProfilePage = () => {
     });
     setFilteredHistory(filtered);
 
-    // Update high score display
     const stageIndex = selectedStage === 'all' ? -1 : selectedStage - 1;
     const levelIndex = selectedLevel === 'all' ? -1 : selectedLevel - 1;
 
@@ -76,41 +74,41 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="bg-[#7077a1] text-black flex flex-col justify-center items-center w-screen mt-4">
+    <div className="bg-[#7077a1] text-black flex flex-col justify-center items-center w-screen mt-4 font-semibold">
       {userInformation ? (
         <div className="flex flex-col items-center bg-[#e8e9a1] rounded-3xl p-6 w-10/12">
-          <h1 className="text-5xl font-bold">ชื่อของคุณ:</h1>
-          <h2 className="text-2xl">คะแนนสูงสุด</h2>
+          <h1 className="text-6xl font-bold">ชื่อของคุณ:</h1>
+          <h2 className="text-4xl">{highScoreDisplay}</h2>
 
           <div className="flex flex-row space-x-2 items-center mb-2">
-            <label className="mb-2 text-xl">เลือกด่าน:</label>
+            <label className="mb-2 text-4xl">เลือกด่าน:</label>
             <select
               value={selectedStage}
               onChange={handleStageChange}
-              className="bg-orange-400 border-2 text-xl border-black rounded-lg py-1 px-3 mb-3"
+              className="bg-red-300 border-2 text-2xl border-black rounded-lg py-1 px-3 mb-3"
             >
-              <option value="all">ทั้งหมด</option>
-              <option value="1">ด่านที่ 1</option>
-              <option value="2">ด่านที่ 2</option>
+              <option value="all" className='font-bold'>ทั้งหมด</option>
+              <option value="1" className='font-bold'>ด่านที่ 1</option>
+              <option value="2" className='font-bold'>ด่านที่ 2</option>
             </select>
 
-            <label className="mb-2 text-xl">เลือกระดับ:</label>
+            <label className="mb-2 text-4xl">เลือกระดับ:</label>
             <select
               value={selectedLevel}
               onChange={handleLevelChange}
-              className="bg-orange-400 border-2 text-xl border-black rounded-lg py-1 px-3 mb-4"
+              className="bg-red-300 border-2 text-2xl border-black rounded-lg py-1 px-3 mb-4"
             >
-              <option value="all">ทั้งหมด</option>
-              <option value="1">ง่าย</option>
-              <option value="2">ปานกลาง</option>
-              <option value="3">ยาก</option>
+              <option value="all" className='font-bold'>ทั้งหมด</option>
+              <option value="1" className='font-bold'>ง่าย</option>
+              <option value="2" className='font-bold'>ปานกลาง</option>
+              <option value="3" className='font-bold'>ยาก</option>
             </select>
           </div>
 
           <div className="user-history overflow-y-auto border-4 border-black rounded-2xl p-2 w-full h-80">
             <ul className="list-none">
               {filteredHistory.map((element, index) => (
-                <li key={index} className="bg-white border border-black text-2xl rounded-lg p-2 my-1 font-extrabold">
+                <li key={index} className="bg-white border border-black text-4xl rounded-lg p-2 my-1 font-extrabold">
                   วันที่: {element.date}, เวลา: {element.time} <br />
                   ด่านที่: {element.stage} ({getLevelName(element.level)}) <br />
                   คะแนน: {element.score}, ความแม่นยำ: {element.accuracy}, เกรด: {element.rank}
@@ -121,11 +119,11 @@ const ProfilePage = () => {
 
           <div className="flex justify-between space-x-2 w-full mt-4">
             <Link to="/checkuser">
-                <Button text="กลับไปหน้าหลัก" text_size="text-2xl" bg_color="bg-orange-400" />
+                <Button text="กลับไปหน้าหลัก" text_size="text-4xl" bg_color="bg-red-300" />
             </Link> 
 
             <Link to="/game">
-              <Button text="เล่นเกม" text_size="text-2xl" bg_color="bg-orange-400"/>
+              <Button text="เล่นเกม" text_size="text-4xl" bg_color="bg-red-300"/>
             </Link>
           </div>
         </div>

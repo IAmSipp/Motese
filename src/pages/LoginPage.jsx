@@ -80,24 +80,24 @@ export const LoginPage = () => {
 
   return (
     <div className="w-screen h-screen flex flex-col">
-      <div className="flex items-start w-full p-2">
+      <div className="flex items-start w-full p-2 h-[10%]">
         <Link to="/checkuser">
           <Button width="w-52" text="ย้อนกลับ" text_size="text-4xl" />
         </Link>
       </div>
 
       <div className="flex flex-col items-center justify-center w-full p-2 h-[100%]">
-        <div className="flex flex-col space-y-3 items-center justify-center bg-purple-950 w-6/12 h-36 rounded-t-3xl">
-          <h1 className="text-6xl text-center w-full px-5 text-white">เข้าสู่ระบบ</h1>
+        <div className="flex flex-col space-y-3 items-center justify-center bg-red-400 shadow-black w-6/12 h-36 rounded-t-3xl">
+          <h1 className="text-6xl text-center font-semibold w-full px-5">เข้าสู่ระบบ</h1>
           {errorMessage && <h1 className="text-red-500 text-2xl">{errorMessage}</h1>}
           {submitMessage && <h1 className="text-green-500 text-2xl">{submitMessage}</h1>}
         </div>
         <div className="flex flex-col space-y-6 items-center justify-center bg-gray-200 w-6/12 h-80 py-4 rounded-b-3xl">
           <div className="flex flex-col items-center w-full">
-            <h1 className="text-4xl text-center w-full px-4 text-black">ใส่ชื่อของคุณ</h1>
+            <h1 className="text-4xl text-center w-full px-4 text-black font-semibold">ใส่ชื่อของคุณ</h1>
             <Form
-              placeholder="ใส่ชื่อของคุณ"
-              text_size="text-3xl"
+              placeholder_text="ใส่ชื่อของคุณ"
+              text_size="text-3xl font-semibold"
               name="username"
               value={formData.username}
               onChange={handleInputChange}
@@ -105,10 +105,10 @@ export const LoginPage = () => {
           </div>
 
           <div className="flex flex-col items-center w-full">
-            <h1 className="text-4xl text-center w-full px-4 text-black">ใส่รหัสของคุณ (ตัวเลข 4 หลัก)</h1>
+            <h1 className="text-4xl text-center w-full px-4 font-semibold text-black">ใส่รหัสของคุณ (ตัวเลข 4 หลัก)</h1>
             <Form
-              placeholder="ใส่รหัสของคุณ"
-              text_size="text-3xl"
+              placeholder_text="ใส่รหัสของคุณ"
+              text_size="text-3xl font-semibold"
               name="password"
               value={formData.password}
               onChange={handleInputChange}
@@ -119,12 +119,11 @@ export const LoginPage = () => {
             text="ยืนยัน"
             text_color="text-white"
             text_size="text-3xl"
-            bg_color="bg-purple-950"
+            bg_color="bg-red-400"
             py="p-1"
             width="w-80"
             heigh="h-10"
             rounded="rounded-3xl"
-            hover="hover:bg-purple-600 hover:border-pink-950"
             onClick={handleSubmit}
           />
         </div>

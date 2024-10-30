@@ -47,11 +47,11 @@ const GamePage = () => {
   }, [isLoaded]);
 
   return (
-    <div className='flex flex-col h-screen w-screen'>
+    <div className='flex flex-col h-screen w-screen font-semibold'>
       {loading && <LoadingScreen />}
 
       {gameSelecting && 
-        <div className={`absolute top-0 left-0 z-40 bg-sky-500`}>
+        <div className={`absolute top-0 left-0 z-40 bg-[#7077a1]`}>
           <div className="flex flex-col justify-center items-center w-screen h-screen">
             {showStageSelection && <StageSelection onSelect={handleStageSelect} />}
             {showLevelSelection && <LevelSelection onSelect={handleLevelSelect} />}
@@ -129,7 +129,7 @@ const Setting = () => {
       <div className={`transition-all duration-500 ease-in-out ${isNavbarVisible ? 'absolute top-1 ml-2 mt-[5.5rem]' : 'absolute top-0 m-2'}`}>
         <Button
           text={isNavbarVisible ? "ปิดตั้งค่า" : "เปิดตั้งค่า"}
-          text_size="text-lg"
+          text_size="text-2xl"
           width='w-36'
           py="p-0"
           onClick={toggleNavbar}
@@ -191,8 +191,8 @@ const SettingNavbar = () => {
         <div className="relative">
           <Button
             text='เลือกด่าน'
-            text_size="text-xl"
-            width="w-24"
+            text_size="text-2xl"
+            width="w-32"
             py="p-1"
             onClick={() => {
               setIsStageOpen(!isStageOpen);
@@ -217,8 +217,8 @@ const SettingNavbar = () => {
         <div className="relative">
           <Button
             text='เลือกความยาก'
-            text_size="text-xl"
-            width="w-28"
+            text_size="text-2xl"
+            width="w-34"
             py="p-1"
             onClick={() => {
               setIsLevelOpen(!isLevelOpen);
@@ -243,8 +243,8 @@ const SettingNavbar = () => {
         <div className="relative">
           <Button 
             text='กลับหน้าแรก'
-            text_size='text-xl'
-            width='w-28'
+            text_size="text-2xl"
+            width="w-34"
             py='p-1'
             onClick={Back}
           />
@@ -351,8 +351,8 @@ const SettingNavbar = () => {
         <div className="relative space-x-2">
           <Button 
             text="เลือกกล้อง" 
-            text_size="text-xl" 
-            width="w-28" 
+            text_size="text-2xl"
+            width="w-32"
             height="h-auto" 
             py="p-1"
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -375,8 +375,8 @@ const SettingNavbar = () => {
             </ul>)}
           <Button 
             text="กลับด้านกล้อง" 
-            text_size="text-xl" 
-            width="w-28" 
+            text_size="text-2xl"
+            width="w-32"
             height="h-auto" 
             py="p-1"
             onClick={ToggleFlipCamera}
@@ -658,14 +658,15 @@ const WebcamView = () => {
   return (
     <div className="flex flex-col w-full h-full">
       <div className="relative w-full h-full">
-        {!isWebcamRunningRef.current && <h1 className='absolute z-50 w-full h-[90%] flex items-center justify-center text-center'>Webcam</h1>}
+        {!isWebcamRunningRef.current && <h1 className='absolute z-50 w-full h-[90%] flex
+         items-center justify-center text-center text-4xl'>Webcam</h1>}
         <video ref={videoRef} className="w-full h-[95%] bg-black" />
         <canvas ref={canvasRef} className="absolute top-0 left-0 w-full h-[95%] z-30" />
       </div>
       <div className='-mt-1'>
         <Button
           text={webcamRunning ? "ปิดกล้อง" : "เปิดกล้อง"}
-          text_size="text-2xl"
+          text_size="text-4xl"
           width="w-[100%]"
           py="py-2"
           onClick={EnableWebcam}
@@ -710,12 +711,6 @@ const GameView = () => {
     }
   };
 
-  const SendUserData = () => {
-    let username = userInformation['username'];
-    console.log("Username is: " + username);
-    sendMessage("UserParameters(Clone)", "GetData", username);
-  };
-
   const PoseStatus = () => {
     for (let i = 0; i < poseStatus.length; i++) {
       if (poseStatus[i] == true) {
@@ -725,6 +720,12 @@ const GameView = () => {
       }
     }
   }
+
+  const SendUserData = () => {
+    let username = userInformation['username'];
+    console.log("Username is: " + username);
+    sendMessage("UserParameters(Clone)", "GetData", username);
+  };
 
   useEffect(() => {
     SetMasterVolume(parseInt(masterVolume));
@@ -769,7 +770,7 @@ const GameView = () => {
   return (
     <div className='flex items-center justify-center w-full h-full bg-black'>
       <Unity
-        className='w-[98%] h-auto'
+        className='w-[100%] h-auto'
         unityProvider={unityProvider}
       />
     </div>
