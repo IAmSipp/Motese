@@ -77,7 +77,7 @@ const ProfilePage = () => {
     <div className="bg-[#7077a1] text-black flex flex-col justify-center items-center w-screen mt-4 font-semibold">
       {userInformation ? (
         <div className="flex flex-col items-center bg-[#e8e9a1] rounded-3xl p-6 w-10/12">
-          <h1 className="text-6xl font-bold">ชื่อของคุณ:</h1>
+          <h1 className="text-6xl font-bold">ชื่อของคุณ: {userInformation['username']}</h1>
           <h2 className="text-4xl">{highScoreDisplay}</h2>
 
           <div className="flex flex-row space-x-2 items-center mb-2">

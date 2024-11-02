@@ -678,7 +678,7 @@ const WebcamView = () => {
 
 const GameView = () => {
   const { motionCapture, poseStatus, selectedStage, selectedLevel, masterVolume, musicVolume, effectVolume } = useGameContext();
-  const { Unity, unityProvider, isLoaded, sendMessage } = useUnityInstance(selectedStage, selectedLevel);
+  const { Unity, unityProvider, isLoaded, sendMessage, unload } = useUnityInstance(selectedStage, selectedLevel);
   const { userInformation } = useUser();
 
   const ChangeStage = (stage_index) =>{
@@ -766,6 +766,11 @@ const GameView = () => {
     // SendUserData()
   }, [isLoaded])
 
+  useEffect(() => {
+    return () => {
+      unload();
+    };
+  }, [unload]);
 
   return (
     <div className='flex items-center justify-center w-full h-full bg-black'>
