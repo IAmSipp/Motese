@@ -79,6 +79,7 @@ export const LoginPage = () => {
   };
 
   return (
+
     <div className="w-screen h-screen flex flex-col bg-[#7077a1]">
       <div className="flex items-start w-full p-2 h-[10%]">
         <Link to="/checkuser">
@@ -86,7 +87,10 @@ export const LoginPage = () => {
         </Link>
       </div>
 
+
       <div className="flex flex-col items-center justify-center w-full p-2 h-[90%]">
+
+
       <div className="flex flex-col space-y-3 items-center justify-center bg-red-400 shadow-black 
           xl:w-6/12 xl:h-36 2xl:w-8/12 2xl:h-64 rounded-t-3xl">
           <h1 className="xl:text-6xl 2xl:text-8xl text-center font-semibold w-full px-5">เข้าสู่ระบบ</h1>

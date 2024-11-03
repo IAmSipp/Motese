@@ -15,6 +15,7 @@ const LevelSelection = ({ onSelect }) => {
   return (
     <div className='fixed top-0 left-0 z-50'>
       <div className="flex flex-col justify-center items-center w-screen h-screen">
+
       <h1 className="xl:text-8xl 2xl:text-9xl font-bold mb-8 text-white">เลือกความยาก</h1>
 
         <div className="flex flex-col space-y-6">

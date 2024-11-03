@@ -17,3 +17,4 @@ export const MenuPage = () => {
 };
 
 export default MenuPage;
+
