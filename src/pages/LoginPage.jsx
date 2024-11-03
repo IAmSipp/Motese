@@ -79,48 +79,53 @@ export const LoginPage = () => {
   };
 
   return (
-    <div className="w-screen h-screen flex flex-col">
+    <div className="w-screen h-screen flex flex-col bg-[#7077a1]">
       <div className="flex items-start w-full p-2 h-[10%]">
         <Link to="/checkuser">
-          <Button width="w-52" text="ย้อนกลับ" text_size="text-4xl" />
+        <Button width="xl:w-72 2xl:w-96" text="ย้อนกลับ" text_size="xl:text-5xl 2xl:text-6xl" />
         </Link>
       </div>
 
-      <div className="flex flex-col items-center justify-center w-full p-2 h-[100%]">
-        <div className="flex flex-col space-y-3 items-center justify-center bg-red-400 shadow-black w-6/12 h-36 rounded-t-3xl">
-          <h1 className="text-6xl text-center font-semibold w-full px-5">เข้าสู่ระบบ</h1>
-          {errorMessage && <h1 className="text-red-500 text-2xl">{errorMessage}</h1>}
-          {submitMessage && <h1 className="text-green-500 text-2xl">{submitMessage}</h1>}
+      <div className="flex flex-col items-center justify-center w-full p-2 h-[90%]">
+      <div className="flex flex-col space-y-3 items-center justify-center bg-red-400 shadow-black 
+          xl:w-6/12 xl:h-36 2xl:w-8/12 2xl:h-64 rounded-t-3xl">
+          <h1 className="xl:text-6xl 2xl:text-8xl text-center font-semibold w-full px-5">เข้าสู่ระบบ</h1>
+          {errorMessage && <h1 className="text-red-500 xl:text-2xl 2xl:text-3xl font-semibold">{errorMessage}</h1>}
+          {submitMessage && <h1 className="text-green-500 xltext-2xl 2xl:text-3xl font-semibold">{submitMessage}</h1>}
         </div>
-        <div className="flex flex-col space-y-6 items-center justify-center bg-gray-200 w-6/12 h-80 py-4 rounded-b-3xl">
+        <div className="flex flex-col xl:space-y-6 items-center justify-start bg-gray-200 2xl:space-y-1
+        xl:w-6/12 xl:h-4/6 2xl:w-8/12 2xl:h-3/6 py-4 rounded-b-3xl">
           <div className="flex flex-col items-center w-full">
-            <h1 className="text-4xl text-center w-full px-4 text-black font-semibold">ใส่ชื่อของคุณ</h1>
+            <h1 className="xl:text-4xl 2xl:text-6xl text-center w-full px-4 text-black font-semibold my-3">ใส่ชื่อของคุณ</h1>
             <Form
               placeholder_text="ใส่ชื่อของคุณ"
-              text_size="text-3xl font-semibold"
+              text_size="xl:text-3xl 2xl:text-5xl font-semibold"
+              placeholder_text_size='xl:placeholder:text-2xl 2xl:placeholder:text-5xl'
               name="username"
+              width='w-4/6'
               value={formData.username}
               onChange={handleInputChange}
             />
           </div>
 
           <div className="flex flex-col items-center w-full">
-            <h1 className="text-4xl text-center w-full px-4 font-semibold text-black">ใส่รหัสของคุณ (ตัวเลข 4 หลัก)</h1>
+            <h1 className="xl:text-4xl 2xl:text-6xl text-center w-full px-4 font-semibold text-black my-3">ใส่รหัสของคุณ (ตัวเลข 4 หลัก)</h1>
             <Form
               placeholder_text="ใส่รหัสของคุณ"
-              text_size="text-3xl font-semibold"
+              text_size="xl:text-3xl 2xl:text-5xl font-semibold"
+              placeholder_text_size='xl:placeholder:text-2xl 2xl:placeholder:text-5xl'
               name="password"
+              width='w-4/6'
               value={formData.password}
               onChange={handleInputChange}
             />
           </div>
-
           <Button
             text="ยืนยัน"
             text_color="text-white"
-            text_size="text-3xl"
+            text_size="xl:text-3xl 2xl:text-5xl"
             bg_color="bg-red-400"
-            py="p-1"
+            py="p-1 my-10"
             width="w-80"
             heigh="h-10"
             rounded="rounded-3xl"

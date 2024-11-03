@@ -74,9 +74,9 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="bg-[#7077a1] text-black flex flex-col justify-center items-center w-screen mt-4 font-semibold">
+    <div className="bg-[#7077a1] text-black flex flex-col justify-center items-center w-screen font-semibold h-screen">
       {userInformation ? (
-        <div className="flex flex-col items-center bg-[#e8e9a1] rounded-3xl p-6 w-10/12">
+        <div className="flex flex-col items-center bg-[#e8e9a1] rounded-3xl p-6 w-10/12 xl:h-6/6 2xl:h-5/6">
           <h1 className="text-6xl font-bold">ชื่อของคุณ: {userInformation['username']}</h1>
           <h2 className="text-4xl">{highScoreDisplay}</h2>
 
@@ -105,7 +105,7 @@ const ProfilePage = () => {
             </select>
           </div>
 
-          <div className="user-history overflow-y-auto border-4 border-black rounded-2xl p-2 w-full h-80">
+          <div className="user-history overflow-y-auto border-4 border-black rounded-2xl p-2 w-full xl:h-80 2xl:h-4/6">
             <ul className="list-none">
               {filteredHistory.map((element, index) => (
                 <li key={index} className="bg-white border border-black text-4xl rounded-lg p-2 my-1 font-extrabold">

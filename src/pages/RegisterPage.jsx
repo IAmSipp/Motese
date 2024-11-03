@@ -65,36 +65,42 @@ export const RegisterPage = () => {
   };
 
   return (
-    <div className='w-screen h-screen flex flex-col'>
-      <div className='flex items-start w-full p-2'>
+    <div className='w-screen h-screen flex flex-col bg-[#7077a1]'>
+      <div className="flex items-start w-full p-2 xl:h-[15%] 2xl:h-[10%]">
         <Link to="/checkuser">
-          <Button width="w-52" text="ย้อนกลับ" text_size="text-4xl" />
+          <Button width="xl:w-72 2xl:w-96" text="ย้อนกลับ" text_size="xl:text-5xl 2xl:text-6xl" />
         </Link>
       </div>
 
-      <div className='flex flex-col items-center justify-center w-full p-2 h-[80%] font-semibold'>
-        <div className='flex flex-col space-y-3 items-center justify-center bg-orange-500 w-6/12 h-72 rounded-t-3xl'>
-          <h1 className='text-6xl text-center w-full px-5 text-white'>สมัครสมาชิก</h1>
-          {errorMessage && <h1 className="text-red-500 text-2xl">{errorMessage}</h1>}
-          {submitMessage && <h1 className="text-green-500 text-2xl">{submitMessage}</h1>}
+      <div className='flex flex-col items-center justify-center w-full p-2 h-full font-semibold'>
+        <div className='flex flex-col space-y-3 items-center justify-center bg-orange-500 xl:w-6/12 xl:h-1/6 
+        2xl:w-6/12 2xl:h-[25%] rounded-t-3xl'>
+          <h1 className='xl:text-6xl 2xl:text-8xl text-center w-full px-5 text-white'>สมัครสมาชิก</h1>
+          {errorMessage && <h1 className="text-red-500 xl:text-2xl 2xl:text-3xl font-semibold">{errorMessage}</h1>}
+          {submitMessage && <h1 className="text-green-500xl:text-2xl 2xl:text-3xl font-semibold">{submitMessage}</h1>}
         </div>
-        <div className='flex flex-col space-y-6 items-center justify-center bg-gray-200 w-6/12 h-auto py-4 rounded-b-3xl'>
+        <div className='flex flex-col space-y-3 items-center justify-center bg-gray-200 xl:w-6/12 xl:h-4/6 
+        2xl:w-6/12 2xl:h-6/6 py-4 rounded-b-3xl'>
           <div className='flex flex-col items-center w-full'>
-            <h1 className='text-4xl text-center w-full px-4 text-black'>ใส่ชื่อของคุณ</h1>
+            <h1 className='xl:text-4xl 2xl:text-6xl text-center w-full px-4 text-black 2xl:my-3'>ใส่ชื่อของคุณ</h1>
             <Form
-              placeholder="ใส่ชื่อของคุณ"
-              text_size="text-3xl"
+              placeholder_text="ใส่ชื่อของคุณ"
+              text_size="xl:text-3xl 2xl:text-5xl font-semibold"
+              placeholder_text_size='xl:placeholder:text-2xl 2xl:placeholder:text-5xl'
               name="username"
+              width='w-4/6'
               value={formData.username}
               onChange={handleInputChange}
             />
           </div>
 
           <div className='flex flex-col items-center w-full'>
-            <h1 className='text-4xl text-center w-full px-4 text-black'>ใส่รหัสผ่านของคุณ (ตัวเลข 4 หลัก)</h1>
+            <h1 className='xl:text-4xl 2xl:text-6xl text-center w-full px-4 text-black 2xl:my-3'>ใส่รหัสผ่านของคุณ (ตัวเลข 4 หลัก)</h1>
             <Form
-              placeholder="ใส่รหัสของคุณ"
-              text_size="text-3xl"
+              placeholder_text="ใส่รหัสผ่านของคุณ"
+              text_size="xl:text-3xl 2xl:text-5xl font-semibold"
+              placeholder_text_size='xl:placeholder:text-2xl 2xl:placeholder:text-5xl'
+              width='w-4/6'
               name="password1"
               value={formData.password1}
               onChange={handleInputChange}
@@ -102,11 +108,13 @@ export const RegisterPage = () => {
           </div>
 
           <div className='flex flex-col items-center w-full'>
-            <h1 className='text-4xl text-center w-full px-4 text-black'>ยืนยันรหัสผ่านของคุณ</h1>
+            <h1 className='xl:text-4xl 2xl:text-6xl text-center w-full px-4 text-black 2xl:my-3'>ยืนยันรหัสผ่านของคุณ</h1>
             <Form
-              placeholder="ยืนยันรหัสของคุณ"
-              text_size="text-3xl"
+              placeholder_text="ยืนยันรหัสของคุณ"
+              text_size="xl:text-3xl 2xl:text-5xl font-semibold"
+              placeholder_text_size='xl:placeholder:text-2xl 2xl:placeholder:text-5xl'
               name="password2"
+              width='w-4/6'
               value={formData.password2}
               onChange={handleInputChange}
             />

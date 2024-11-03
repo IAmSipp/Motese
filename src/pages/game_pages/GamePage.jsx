@@ -96,9 +96,9 @@ const UserStatView = () => {
   });
 
   return (
-    <div className='flex flex-col space-y-2 p-3'>
-      <h1 className='text-3xl text-center'>ข้อมูลผู้เล่น</h1>
-      <div className='flex flex-col space-y-2 text-3xl'>
+    <div className='flex flex-col space-y-2 p-3 xl:text-3xl 2xl:text-6xl text-white'>
+      <h1 className='text-center'>ข้อมูลผู้เล่น</h1>
+      <div className='flex flex-col space-y-2'>
         <div className='flex flex-row items-center'>
           <h2>คุณคือ: {userInformation.username}</h2>
         </div>
@@ -129,7 +129,7 @@ const Setting = () => {
       <div className={`transition-all duration-500 ease-in-out ${isNavbarVisible ? 'absolute top-1 ml-2 mt-[5.5rem]' : 'absolute top-0 m-2'}`}>
         <Button
           text={isNavbarVisible ? "ปิดตั้งค่า" : "เปิดตั้งค่า"}
-          text_size="text-2xl"
+          text_size="xl:text-2xl 2xl:text-3xl"
           width='w-36'
           py="p-0"
           onClick={toggleNavbar}
@@ -186,13 +186,13 @@ const SettingNavbar = () => {
   }
 
   return (
-    <div className="fixed top-0 left-0 w-full h-20 bg-[#2c314e] shadow-md shadow-black text-white text-2xl flex justify-between items-center px-4 z-50">
+    <div className="fixed top-0 left-0 w-full h-20 bg-[#2c314e] shadow-md shadow-black text-white xl:text-2xl 2xl:text-4xl flex justify-between items-center px-4 z-50">
       <div className="flex space-x-4 items-center">
         <div className="relative">
           <Button
             text='เลือกด่าน'
-            text_size="text-2xl"
-            width="w-32"
+            text_size="xl:text-2xl 2xl:text-4xl"
+            width='xl:w-36 2xl:w-48'
             py="p-1"
             onClick={() => {
               setIsStageOpen(!isStageOpen);
@@ -217,7 +217,7 @@ const SettingNavbar = () => {
         <div className="relative">
           <Button
             text='เลือกความยาก'
-            text_size="text-2xl"
+            text_size="xl:text-2xl 2xl:text-3xl"
             width="w-34"
             py="p-1"
             onClick={() => {
@@ -243,8 +243,8 @@ const SettingNavbar = () => {
         <div className="relative">
           <Button 
             text='กลับหน้าแรก'
-            text_size="text-2xl"
-            width="w-34"
+            text_size="xl:text-2xl 2xl:text-4xl"
+            width='xl:w-36 2xl:w-48'
             py='p-1'
             onClick={Back}
           />
@@ -351,8 +351,8 @@ const SettingNavbar = () => {
         <div className="relative space-x-2">
           <Button 
             text="เลือกกล้อง" 
-            text_size="text-2xl"
-            width="w-32"
+            text_size="xl:text-2xl 2xl:text-4xl"
+            width='xl:w-36 2xl:w-48'
             height="h-auto" 
             py="p-1"
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -375,8 +375,8 @@ const SettingNavbar = () => {
             </ul>)}
           <Button 
             text="กลับด้านกล้อง" 
-            text_size="text-2xl"
-            width="w-32"
+            text_size="xl:text-2xl 2xl:text-4xl"
+            width='xl:w-36 2xl:w-48'
             height="h-auto" 
             py="p-1"
             onClick={ToggleFlipCamera}
@@ -407,11 +407,11 @@ const WebcamView = () => {
   useEffect(() => {
     const createLandmarkers = async () => {
       try {
-        const vision = await FilesetResolver.forVisionTasks("Models/wasm");
+        const vision = await FilesetResolver.forVisionTasks("models/wasm");
 
         const hand_landmarks = await HandLandmarker.createFromOptions(vision, {
           baseOptions: {
-            modelAssetPath: "Models/hand_model/hand_landmarker.task",
+            modelAssetPath: "models/hand_model/hand_landmarker.task",
             delegate: "GPU"
           },
           runningMode: 'VIDEO',
@@ -423,7 +423,7 @@ const WebcamView = () => {
 
         const pose_landmarks = await PoseLandmarker.createFromOptions(vision, {
           baseOptions: {
-            modelAssetPath: "Models/pose_model/pose_landmarker_lite.task",
+            modelAssetPath: "models/pose_model/pose_landmarker_lite.task",
             delegate: "GPU"
           },
           runningMode: 'VIDEO',
@@ -665,8 +665,8 @@ const WebcamView = () => {
       </div>
       <div className='-mt-1'>
         <Button
+          text_size="xl:text-4xl 2xl:text-6xl"
           text={webcamRunning ? "ปิดกล้อง" : "เปิดกล้อง"}
-          text_size="text-4xl"
           width="w-[100%]"
           py="py-2"
           onClick={EnableWebcam}
