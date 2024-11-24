@@ -651,8 +651,18 @@ const WebcamView = () => {
   }
 
   function FindAngle(a, b, c) {
-    const radian = Math.atan2(a.y - b.y, a.x - b.x) - Math.atan2(c.y - b.y, c.x - b.x);
-    return radian * (180 / Math.PI);
+    const vectorBA = { x: a.x - b.x, y: a.y - b.y };
+    const vectorBC = { x: c.x - b.x, y: c.y - b.y };
+  
+    const dotProduct = vectorBA.x * vectorBC.x + vectorBA.y * vectorBC.y;
+  
+    const magnitudeBA = Math.sqrt(vectorBA.x ** 2 + vectorBA.y ** 2);
+    const magnitudeBC = Math.sqrt(vectorBC.x ** 2 + vectorBC.y ** 2);
+  
+    const angleInRadians = Math.acos(dotProduct / (magnitudeBA * magnitudeBC));
+  
+    const angleInDegrees = angleInRadians * (180 / Math.PI);
+    return angleInDegrees;
   }
 
   return (
